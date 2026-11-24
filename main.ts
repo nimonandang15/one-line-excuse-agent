@@ -8,10 +8,15 @@ import * as fs from "node:fs";
 const text =
   "I delegated it to a subagent, who delegated it to a subagent, who is currently in a standup about why it is late.";
 
-// The gate allows 1–160 characters: refuse loudly instead of ever
-// writing a text outside it.
-if ([...text].length < 1 || [...text].length > 160 || text.trim() === "") {
-  throw new Error("entry must be 1-160 characters");
+// The gate allows 1–160 characters, one line only: refuse loudly
+// instead of ever writing a text outside it.
+if (
+  [...text].length < 1 ||
+  [...text].length > 160 ||
+  text.trim() === "" ||
+  text.includes("\n")
+) {
+  throw new Error("entry must be one line of 1-160 characters");
 }
 
 fs.mkdirSync("/output", { recursive: true });
